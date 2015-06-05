@@ -1,6 +1,8 @@
 sfp-diactoros-extension
 ==============
 
+[![Build Status](https://travis-ci.org/sasezaki/Backbeard.png?branch=master)](https://travis-ci.org/sasezaki/Backbeard)
+
 A extension for zend-diactoros.
 
 ## Feature
