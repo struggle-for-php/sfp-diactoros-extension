@@ -26,9 +26,9 @@ before_script:
 script:
   - if [[ $EXECUTE_COVERAGE == 'true' ]]; then ./vendor/bin/phpunit --coverage-clover=coverage.clover ; fi
   - if [[ $EXECUTE_COVERAGE != 'true' ]]; then ./vendor/bin/phpunit ; fi
-  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then ./vendor/bin/phpcs --standard=PSR2 src test ; fi
+  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then ./vendor/bin/phpcs --standard=PSR2 src tests ; fi
 
 after_script:
   - if [[ $EXECUTE_COVERAGE == 'true' ]]; then wget https://scrutinizer-ci.com/ocular.phar ; fi
-  - if [[ $EXECUTE_COVERAGE == 'true' ]]; then php ocular.phar code-coverage:upload --format=php-clover ./test/coverage.clover ; fi
+  - if [[ $EXECUTE_COVERAGE == 'true' ]]; then php ocular.phar code-coverage:upload --format=php-clover ./tests/coverage.clover ; fi
 
