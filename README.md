@@ -5,7 +5,7 @@ A extension for zend-diactoros.
 
 ## Feature
 
-`SfpDiactoros\Response\SwitchingEmitter` allows `fpassthru()` with `FpassthruMarkerInterface`.
+`SfpDiactoros\Response\SwitchingEmitter` allows `fpassthru()` with `FpassthruInterface`.
 
 just changed only in `emitBody()` from original `Zend\Diactoros\Response\SapiEmitter`.
 

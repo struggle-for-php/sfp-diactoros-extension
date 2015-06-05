@@ -2,7 +2,7 @@
 namespace SfpDiactoros\Stream;
 
 /**
- * Marker Interface to use fpassthru()
+ * Marker Interface to use `fpassthru()`
  */
 interface FpassthruInterface
 {}

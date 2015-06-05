@@ -13,8 +13,8 @@ namespace SfpDiactoros\Response;
 use RuntimeException;
 use Psr\Http\Message\ResponseInterface;
 use SfpDiactoros\Stream\FpassthruInterface;
-use Zend\Diactoros\Response\EmitterInterface;
 use SfpDiactoros\Stream\RewindFpassthruInterface;
+use Zend\Diactoros\Response\EmitterInterface;
 
 class SwitchingEmitter implements EmitterInterface
 {
