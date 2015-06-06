@@ -49,10 +49,10 @@ class SwitchingEmitter implements EmitterInterface
     {
         $reasonPhrase = $response->getReasonPhrase();
         header(sprintf(
-        'HTTP/%s %d%s',
-        $response->getProtocolVersion(),
-        $response->getStatusCode(),
-        ($reasonPhrase ? ' '.$reasonPhrase : '')
+            'HTTP/%s %d%s',
+            $response->getProtocolVersion(),
+            $response->getStatusCode(),
+            ($reasonPhrase ? ' '.$reasonPhrase : '')
         ));
     }
 
@@ -73,9 +73,9 @@ class SwitchingEmitter implements EmitterInterface
             $first = true;
             foreach ($values as $value) {
                 header(sprintf(
-                '%s: %s',
-                $name,
-                $value
+                    '%s: %s',
+                    $name,
+                    $value
                 ), $first);
                 $first = false;
             }
