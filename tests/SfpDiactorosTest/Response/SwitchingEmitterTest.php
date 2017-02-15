@@ -15,11 +15,6 @@ class SwitchingEmitterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->emitter = new SwitchingEmitter();
-
-        $this->php = PHPUnit_Extension_FunctionMocker::start($this, 'SfpDiactoros\\Response')
-            ->mockFunction('headers_sent')
-            ->mockFunction('rewind')
-            ->getMock();
     }
 
     /** @runInSeparateProcess */
@@ -28,10 +23,15 @@ class SwitchingEmitterTest extends PHPUnit_Framework_TestCase
         $expected = 'foo';
         $response = new Response("data://text/html,{$expected}");
 
-        $this->php->expects($this->once())
+        $functionMock = PHPUnit_Extension_FunctionMocker::start($this, 'SfpDiactoros\\Response')
+            ->mockFunction('headers_sent')
+            ->mockFunction('fpassthru')
+            ->getMock();
+
+        $functionMock->expects($this->once())
             ->method('headers_sent')
             ->will($this->returnValue(false));
-        $this->php->expects($this->never())
+        $functionMock->expects($this->never())
             ->method('fpassthru');
 
         ob_start();
@@ -42,14 +42,19 @@ class SwitchingEmitterTest extends PHPUnit_Framework_TestCase
     /** @runInSeparateProcess */
     public function testSwitchingEmitbodyFpassthruWithMarkerInterface()
     {
+        $functionMock = PHPUnit_Extension_FunctionMocker::start($this, 'SfpDiactoros\\Response')
+            ->mockFunction('headers_sent')
+            ->mockFunction('rewind')
+            ->getMock();
+
         $expected = 'bar';
         $stream = new RewindFpassthruStream("data://text/html,{$expected}");
         $response = new Response($stream);
 
-        $this->php->expects($this->once())
+        $functionMock->expects($this->once())
             ->method('headers_sent')
             ->will($this->returnValue(false));
-        $this->php->expects($this->once())
+        $functionMock->expects($this->once())
             ->method('rewind');
 
         ob_start();
