@@ -3,9 +3,11 @@ sfp-diactoros-extension
 
 [![Build Status](https://travis-ci.org/struggle-for-php/sfp-diactoros-extension.png?branch=master)](https://travis-ci.org/struggle-for-php/sfp-diactoros-extension)
 
-A extension for zend-diactoros.
+extensions for zend-diactoros.
 
-## Feature
+
+
+## SwitchingEmitter
 
 `SfpDiactoros\Response\SwitchingEmitter` allows `fpassthru()` with `FpassthruInterface`.
 
@@ -30,9 +32,7 @@ if ($body instanceof FpassthruInterface) {
 }
 ```
 
-
-
-## Usage
+### Usage
 
 ```php
 use SfpDiactoros\Response\SwitchingEmitter;
