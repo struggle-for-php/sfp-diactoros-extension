@@ -1,13 +1,13 @@
 {
   "name" : "struggle-for-php/sfp-diactoros-extension",
-  "description" : "A extension for zend-diactoros.",
+  "description" : "An extension for zend-diactoros.",
   "require" : {
-    "php" : ">=5.5.0",
-    "zendframework/zend-diactoros" : "~1.0"
+    "php" : "^5.6 || ^7.0",
+    "zendframework/zend-diactoros" : "~1.3"
   },
   "require-dev" : {
-    "phpunit/phpunit" : "~4.6",
-    "lstrojny/phpunit-function-mocker" : "~0.2.0",
+    "phpunit/phpunit" : "^5",
+    "lstrojny/phpunit-function-mocker" : "~0.4",
     "squizlabs/php_codesniffer": "~2.0"
   },
   "authors" : [ {

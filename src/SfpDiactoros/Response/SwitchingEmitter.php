@@ -14,9 +14,12 @@ use Psr\Http\Message\ResponseInterface;
 use SfpDiactoros\Stream\FpassthruInterface;
 use SfpDiactoros\Stream\RewindFpassthruInterface;
 use Zend\Diactoros\Response\EmitterInterface;
+use Zend\Diactoros\Response\SapiEmitterTrait;
 
 class SwitchingEmitter implements EmitterInterface
 {
+    use SapiEmitterTrait;
+
     /**
      * Emits a response for a PHP SAPI environment.
      *
@@ -32,75 +35,21 @@ class SwitchingEmitter implements EmitterInterface
             throw new RuntimeException('Unable to emit response; headers already sent');
         }
 
+        $response = $this->injectContentLength($response);
+
         $this->emitStatusLine($response);
         $this->emitHeaders($response);
-        $this->emitBody($response, $maxBufferLevel);
-    }
-
-    /**
-     * Emit the status line.
-     *
-     * Emits the status line using the protocol version and status code from
-     * the response; if a reason phrase is availble, it, too, is emitted.
-     *
-     * @param ResponseInterface $response
-     */
-    private function emitStatusLine(ResponseInterface $response)
-    {
-        $reasonPhrase = $response->getReasonPhrase();
-        header(sprintf(
-            'HTTP/%s %d%s',
-            $response->getProtocolVersion(),
-            $response->getStatusCode(),
-            ($reasonPhrase ? ' '.$reasonPhrase : '')
-        ));
-    }
-
-    /**
-     * Emit response headers.
-     *
-     * Loops through each header, emitting each; if the header value
-     * is an array with multiple values, ensures that each is sent
-     * in such a way as to create aggregate headers (instead of replace
-     * the previous).
-     *
-     * @param ResponseInterface $response
-     */
-    private function emitHeaders(ResponseInterface $response)
-    {
-        foreach ($response->getHeaders() as $header => $values) {
-            $name = $this->filterHeader($header);
-            $first = true;
-            foreach ($values as $value) {
-                header(sprintf(
-                    '%s: %s',
-                    $name,
-                    $value
-                ), $first);
-                $first = false;
-            }
-        }
+        $this->flush($maxBufferLevel);
+        $this->emitBody($response);
     }
 
     /**
      * Emit the message body.
      *
-     * Loops through the output buffer, flushing each, before emitting
-     * the response body using `echo()`.
-     *
      * @param ResponseInterface $response
-     * @param int               $maxBufferLevel Flush up to this buffer level.
      */
-    private function emitBody(ResponseInterface $response, $maxBufferLevel)
+    private function emitBody(ResponseInterface $response)
     {
-        if (null === $maxBufferLevel) {
-            $maxBufferLevel = ob_get_level();
-        }
-
-        while (ob_get_level() > $maxBufferLevel) {
-            ob_end_flush();
-        }
-
         $body = $response->getBody();
 
         if ($body instanceof FpassthruInterface) {
@@ -112,20 +61,5 @@ class SwitchingEmitter implements EmitterInterface
         } else {
             echo $response->getBody();
         }
-    }
-
-    /**
-     * Filter a header name to wordcase.
-     *
-     * @param string $header
-     *
-     * @return string
-     */
-    private function filterHeader($header)
-    {
-        $filtered = str_replace('-', ' ', $header);
-        $filtered = ucwords($filtered);
-
-        return str_replace(' ', '-', $filtered);
     }
 }
